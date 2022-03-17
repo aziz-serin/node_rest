@@ -43,12 +43,38 @@ app.post('/hook', async (req,res)=>{
       con.query(sql, insert, function (err, result){
           if(err) throw err;
           console.log("Inserted hook into the DB");
-      })
+      });
    });
-   // Let the sender now everything is OK
+   // Let the sender know everything is OK
    res.sendStatus(200);
 });
 
+/*
+In the above receiever, we store everything in a table called hooks in the database. We may want to create new tables for each
+expected type of event, and check the type before we insert the event into the database. According the different events, we may
+want to store data into different tables.
+* */
+
+app.get('/time_chart_data', async (req, res)=>{
+    let body = req.body;
+    let req_episode_id = body.episode_id;
+    let sql = "SELECT COUNT(hooks.episode_id) FROM hooks WHERE hooks.episode_id = ? AND DATE(occured_at) > (NOW() - INTERVAL 7 DAY)";
+    con.connect(function (err){
+        let sql = "SELECT hooks.occured_at FROM hooks WHERE hooks.episode_id = ? AND hooks.occured_at >= DATE_ADD(CURDATE(), INTERVAL -7 DAY)";
+        let insert = [req_episode_id];
+        con.query(sql, insert, function (err, result){
+           if(err) throw err;
+           let list = [];
+           for(var i=0; i<result.length; i++){
+                list.push(result[i].occured_at);
+           }
+           let json = {"results":list};
+           res.send(json);
+        });
+    });
+    // Print to understand everything is okay from the server
+    console.log("Successfully returned the required data!");
+});
 
 
 // server will listen on port 3000

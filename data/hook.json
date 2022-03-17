@@ -1,0 +1,9 @@
+{
+    "type": "episode.downloaded",
+    "event_id": "123e4567-e89b-12d3-a456-426614174000",
+    "occurred_at": "2022-03-17 12:34:47",
+    "data": {
+        "episode_id": "123e4567-e89b-12d3-a456-426614174001",
+        "podcast_id": "123e4567-e89b-12d3-a456-426614174002"
+    }
+}
