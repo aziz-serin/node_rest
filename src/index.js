@@ -1,11 +1,9 @@
 const express = require('express');
-const mysql = require('mysql');
 const bodyParser = require('body-parser');
-
+const mysql = require('mysql');
 const app = express();
 app.use(bodyParser.urlencoded({extened:false}));
 app.use(bodyParser.json());
-
 // create a mysql connection
 const con = mysql.createConnection({
     user: "root",
@@ -25,6 +23,14 @@ con.connect(function (err){
     console.log("Table created");
   });
 });
+
+// server will listen on port 3000
+let server = app.listen(3000, function(){
+    console.log(`Listening on port ${server.address().port}`);
+});
+
+module.exports = server;
+
 // configure the reciever
 app.post('/hook', async (req,res)=>{
    const resourseUrl = req.body.resource_url;
@@ -68,18 +74,13 @@ app.get('/time_chart_data', async (req, res)=>{
            for(var i=0; i<result.length; i++){
                 list.push(result[i].occured_at);
            }
-           let json = {"results":list};
-           res.send(json);
+           let json = {"Results":list};
+           res.status(200).json(json);
         });
     });
     // Print to understand everything is okay from the server
     console.log("Successfully returned the required data!");
 });
 
-
-// server will listen on port 3000
-let server = app.listen(3000, function(){
-    console.log(`Listening on port ${server.address().port}`);
-});
 
 
