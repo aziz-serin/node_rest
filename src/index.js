@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const app = express();
-app.use(bodyParser.urlencoded({extened:false}));
+app.use(bodyParser.urlencoded({extened:true}));
 app.use(bodyParser.json());
 // create a mysql connection
 const con = mysql.createConnection({
