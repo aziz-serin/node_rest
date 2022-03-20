@@ -6,9 +6,9 @@ const expect = chai.expect;
 let test = supertest(app);
 var request = require('request');
 
-
+// Test post function
 describe('POST/hook', function (){
-   it("Test hook", async () =>{
+   it("Test hook good", async()=>{
       var response = await test.post("/hook").send({
             "type": "episode.downloaded",
             "event_id": "123e4567-e89b-12d3-a456-426614174000",
@@ -22,10 +22,9 @@ describe('POST/hook', function (){
    });
 });
 
-describe('GET/time_chart_data', function (){
-  it('Test Status Basic', async () =>{
-      await test.post("/hook").send({
-            "type": "episode.downloaded",
+describe('BAD POST/hook', function (){
+   it("Test hook bad", async () => {
+      var response = await test.post("/hook").send({
             "event_id": "123e4567-e89b-12d3-a456-426614174000",
             "occurred_at": "2022-03-17 12:34:47",
             "data": {
@@ -33,18 +32,45 @@ describe('GET/time_chart_data', function (){
                 "podcast_id": "123e4567-e89b-12d3-a456-426614174002"
             }
       });
-      var response = await test.get("/time_chart_data");
-      // Check if the response returns 200
-      expect(response.status).to.equal(200);
-      // Check if the response is not null
-      expect(response.body).to.not.be.null;
-      // Check if empty result is returned
-      expect(JSON.stringify(response.body)).to.contain("Result");
+      // Check if the query fails
+      expect(response.status).to.not.equal(200);
+   });
+});
+
+// Test get function without a query body
+describe('GET/time_chart_data', function (){
+  it('Test GET', async ()=>{
+        var options = {
+          'method': 'GET',
+          'url': 'http://localhost:3000/time_chart_data',
+          'headers': {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "episode_id": "123e4567-e89b-12d3-a456-426614174001"
+          })
+
+        };
+        request(options, function (error, response) {
+          if (error) throw new Error(error);
+          expect(respsonse.body).to.not.be.null;
+          expect(JSON.stringify(response.body)).to.contain("123e4567-e89b-12d3-a456-426614174001");
+        });
   });
 });
 
+// Test bad get
+describe('BAD GET/time_chart_data', function (){
+  it('Test GET bad', async ()=>{
+      var response = await test.get("/time_chart_data");
+      // Check if the response returns 500
+      expect(response.status).to.equal(500);
+  });
+});
+
+// Test post and get using a query body
 describe('GET/time_chart_data and POST/hooks', function(){
-    it('Test POST and GET', async()=> {
+    it('Test POST and GET', async () => {
         // First POST
         var response = await test.post("/hook").send({
             "type": "episode.downloaded",
