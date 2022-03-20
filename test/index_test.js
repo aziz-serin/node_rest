@@ -53,8 +53,8 @@ describe('GET/time_chart_data', function (){
         };
         request(options, function (error, response) {
           if (error) throw new Error(error);
-          expect(respsonse.body).to.not.be.null;
-          expect(JSON.stringify(response.body)).to.contain("123e4567-e89b-12d3-a456-426614174001");
+          expect(response.body).to.not.be.null;
+          expect(response.status).to.be.equal(200);
         });
   });
 });
@@ -62,9 +62,21 @@ describe('GET/time_chart_data', function (){
 // Test bad get
 describe('BAD GET/time_chart_data', function (){
   it('Test GET bad', async ()=>{
-      var response = await test.get("/time_chart_data");
-      // Check if the response returns 500
-      expect(response.status).to.equal(500);
+      var options = {
+          'method': 'GET',
+          'url': 'http://localhost:3000/time_chart_data',
+          'headers': {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "episode_id": "123e4567-e89b-12d3-a456-426614174001"
+          })
+
+        };
+        request(options, function (error, response) {
+          if (error) throw new Error(error);
+          expect(response.status).to.be.equal(500);
+        });
   });
 });
 
@@ -94,10 +106,10 @@ describe('GET/time_chart_data and POST/hooks', function(){
           })
 
         };
-        request(options, function (error, response) {
+        await request(options, function (error, response) {
           if (error) throw new Error(error);
           expect(respsonse.body).to.not.be.null;
-          expect(JSON.stringify(response.body)).to.contain("123e4567-e89b-12d3-a456-426614174001");
+          expect(response.status).to.be.equal(200);
         });
     });
 });
