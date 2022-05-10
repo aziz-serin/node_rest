@@ -1,8 +1,10 @@
-# Very Simple REST API App 
+# Very Simple REST API 
+
+Just trying to learn a bit more about how rest api works with node.js.
 
 # How to execute?
 
-First, run below to install dependencies
+If for some reason you want to clone and run this, first, run below to install dependencies
 
 ```
 npm install
