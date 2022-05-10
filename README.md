@@ -1,6 +1,6 @@
 # Very Simple REST API 
 
-Just trying to learn a bit more about how rest api works with node.js.
+Just trying to learn a bit more about how rest api works with node.js. It can be used for a starting point for a better implementation later.
 
 # How to execute?
 
